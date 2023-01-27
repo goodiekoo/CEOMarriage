@@ -4,6 +4,8 @@ import string
 
 #Update
 Enter_input = input("Search = ")
+#Error case 1
+#which cannot search "Lip-Bu_Tan", but the personal page can find in the web (https://en.wikipedia.org/wiki/Lip-Bu_Tan)
 u_i = string.capwords(Enter_input)
 lists = u_i.split()
 word = "_".join(lists)
