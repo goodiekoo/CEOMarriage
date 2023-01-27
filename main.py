@@ -1,21 +1,30 @@
-import bs4
 from bs4 import BeautifulSoup
 import requests
-import sys
-import webbrowser
+import string
 
-base_url = "https://search.naver.com/search.naver?where=view&sm=tab_jum&query="
-keyword = input('검색할 CEO 이름 (반드시 영문):')
-#base_url = 'https://www.linkedin.com/search/results/people/?keywords='
-#base_url = 'https://www.google.com/search?q='+''.join(sys.argv[1:]))  #구글은 별도 검색 url 따와야함
-#코드 테스트용, 최종버전에서는 csv 파일을 자동으로 읽어서 처리할 예정
+#Update
+Enter_input = input("Search = ")
+u_i = string.capwords(Enter_input)
+lists = u_i.split()
+word = "_".join(lists)
 
-search_url = base_url + keyword
+#Wikipedia
+url = "https://en.wikipedia.org/wiki/"+word
+#url = prabook or DB
 
-r = requests.get(search_url)
-
-soup = bs4.BeautifulSoup(r.text,"html.parser")
-
-items = soup.select(".api_txt_lines.total_tit")
-for e, item in enumerate(items, 1):
-    print(f"{e} : {item.text}")
+def wikibot(url):
+    url_open = requests.get(url)
+    soup = BeautifulSoup(url_open.content,'html.parser')
+    details =soup('table',{'class':'infobox'})
+    for i in details:
+        h=i.find_all('tr')
+        for j in h:
+            heading = j.find_all('th')
+            detail = j.find_all('td')
+            if heading is not None and detail is not None:
+                for x,y in zip(heading,detail):
+                    print("{}  ::  {}".format(x.text, y.text))
+                    print("--------------------")
+    for i in range(1,3):
+        print(soup('p')[i].text)
+wikibot(url)
